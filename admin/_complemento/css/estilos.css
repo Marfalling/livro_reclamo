@@ -1,0 +1,40 @@
+body {
+    background: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+    font-family: 'Nunito', sans-serif;
+}
+
+.card {
+    border: none;
+    border-radius: 0.35rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+}
+
+.form-control-user {
+    border-radius: 25px;
+    padding: 0.75rem;
+}
+
+.custom-control-input:checked + .custom-control-label::before {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.btn-google {
+    background-color: #ea4335;
+    color: white;
+}
+
+.btn-facebook {
+    background-color: #3b5998;
+    color: white;
+}
