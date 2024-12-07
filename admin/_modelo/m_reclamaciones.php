@@ -27,7 +27,10 @@ function ObtenerIDReclamo()
     $id_reclamo = $_GET['id_reclamo'];
 
     // Consulta para obtener los detalles del reclamo
-    $sql = "SELECT * FROM reclamaciones WHERE id_reclamacion = ?";
+    $sql = "SELECT r.*, u.nombre, u.cel_usuario, u.email_usuario 
+            FROM reclamaciones r
+            JOIN usuario u ON r.id_usuario = u.id_usuario
+            WHERE id_reclamacion = ?";
     $stmt = $con->prepare($sql);
     $stmt->bind_param("i", $id_reclamo);
     $stmt->execute();
@@ -42,6 +45,45 @@ function ObtenerIDReclamo()
 
     return $reclamo;
 }
+
+function ObtenerReclamosPorFecha($fecha_inicio, $fecha_fin) {
+    require('conexion.php');
+    // Consulta para obtener los reclamos entre las fechas proporcionadas
+    $sql = "SELECT r.*, u.nombre FROM reclamaciones r
+    JOIN usuario u ON r.id_usuario = u.id_usuario
+    WHERE r.fecha_reclamo BETWEEN ? AND ?";
+
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    // Verificar si hay resultados
+    if ($resultado && mysqli_num_rows($resultado) > 0) {
+    $reclamos = [];
+    while ($fila = mysqli_fetch_assoc($resultado)) {
+    $reclamos[] = $fila;
+    }
+    return $reclamos;
+    } else {
+    return []; // Si no hay resultados, retornar un array vacío
+    }
+}
+
+function actualizarRespuesta($id_reclamo, $respuesta) {
+    require('conexion.php');
+
+    // Prepara la consulta
+    $sql = "UPDATE reclamaciones 
+            SET respuesta = ?, estado = 'Respondido', fecha_respuesta = NOW() 
+            WHERE id_reclamacion = ?";
+    $stmt = $con->prepare($sql);
+    $stmt->bind_param("si", $respuesta, $id_reclamo);
+    
+    // Ejecuta la consulta y retorna el resultado
+    return $stmt->execute();
+}
+
 
 
 ?>

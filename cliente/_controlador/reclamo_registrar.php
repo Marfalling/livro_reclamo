@@ -82,7 +82,7 @@
                 }
 
                 
-                require("../_vista/index.php");
+                require_once("../_vista/index.php");
                 ?>          
                 </main>
                 <footer class="py-4 bg-light mt-auto">

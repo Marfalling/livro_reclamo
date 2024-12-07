@@ -1,21 +1,16 @@
 <?php
-require_once('../_modelo/conexion.php');  // Subir un nivel para acceder a la raíz
-// Ejemplo de consulta a la base de datos para obtener los reclamos
-
+require_once('../_modelo/conexion.php'); 
 require_once('../_modelo/m_reclamaciones.php');
-$reclamos = ObtenerReclamos();  // Suponiendo que tienes una función que devuelve los reclamos
-?>
+require_once('../_controlador/filtrar_fecha.php');  
 
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reclamos</title>
-    <link rel="stylesheet" href="path/to/bootstrap.css"> <!-- Incluye Bootstrap -->
-    <link rel="stylesheet" href="path/to/font-awesome.css"> <!-- Incluye Font Awesome si lo necesitas -->
     <style>
-        /* Agregar estilo para el layout */
         .wrapper {
             display: flex;
             min-height: 100vh;
@@ -56,6 +51,33 @@ $reclamos = ObtenerReclamos();  // Suponiendo que tienes una función que devuel
             </ol>
             <div class="card mb-4">
                 <div class="card-header">
+                    <i class="fas fa-filter me-1"></i>
+                    Filtrar Reclamos
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="mb-4">
+                        <div class="row">
+                            <div class="col-md-4 d-flex flex-column justify-content-center">
+                                <label for="fecha_inicio" class="text-center">Fecha Inicio:</label>
+                                <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="<?php echo $fecha_inicio; ?>">
+                            </div>
+                            <div class="col-md-4 d-flex flex-column justify-content-center">
+                                <label for="fecha_fin" class="text-center">Fecha Fin:</label>
+                                <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="<?php echo $fecha_fin; ?>">
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end ">
+                                <button type="submit" name="buscar" class="btn btn-primary me-2 mx-3">Buscar</button>
+                                <a href="panel_admin.php" class="btn btn-secondary ms-2">Limpiar</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            
+            <div class="card mb-4">
+                <div class="card-header">
                     <i class="fas fa-table me-1"></i>
                     Lista de Reclamos
                 </div>
@@ -65,7 +87,7 @@ $reclamos = ObtenerReclamos();  // Suponiendo que tienes una función que devuel
                             <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">ID Reclamo</th>
-                                <th class="text-center">ID Usuario</th>
+                                <th class="text-center">Nombre Usuario</th>
                                 <th class="text-center">Fecha Reclamo</th>
                                 <th class="text-center">Hora Reclamo</th>
                                 <th class="text-center">Estado</th>
@@ -82,7 +104,7 @@ $reclamos = ObtenerReclamos();  // Suponiendo que tienes una función que devuel
                                 foreach ($reclamos as $key => $value) {
                                     $n++;
                                     $id_reclamo = $value['id_reclamacion'];  
-                                    $id_usuario = $value['id_usuario'];
+                                    $nombre = $value['nombre'];
                                     $fecha_reclamo = $value['fecha_reclamo'];
                                     $hora_reclamo = $value['hora_reclamo'];
                                     $estado = $value['estado'];
@@ -106,17 +128,17 @@ $reclamos = ObtenerReclamos();  // Suponiendo que tienes una función que devuel
                             <tr>
                                 <td class="text-center"><?php echo $n; ?></td>
                                 <td class="text-center"><?php echo $id_reclamo; ?></td>
-                                <td class="text-center"><?php echo $id_usuario; ?></td>
+                                <td class="text-center"><?php echo $nombre; ?></td>
                                 <td class="text-center"><?php echo $fecha_reclamo; ?></td>
                                 <td class="text-center"><?php echo $hora_reclamo; ?></td>
                                 <td class="text-center">
-                                    <!-- Aquí agregamos el badge con la clase dinámica para el estado -->
+                                    
                                     <span class="badge rounded-pill <?php echo $badgeClass; ?>"><?php echo $estado; ?></span>
                                 </td>
                                 <td class="text-center"><?php echo $respuesta; ?></td>
                                 <td class="text-center"><?php echo $fecha_respuesta; ?></td>
                                 <td class="text-center">
-                                    <a href="/livro_reclamo/cliente/_vista/reclamo_pdf.php?id_usuario=<?php echo htmlspecialchars($value['id_usuario']); ?>" 
+                                    <a href="/cliente/_vista/reclamo_pdf.php?id_usuario=<?php echo htmlspecialchars($value['id_usuario']); ?>" 
                                        class="btn btn-info btn-sm" 
                                        target="_blank">Ver PDF</a>
                                 </td>

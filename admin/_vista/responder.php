@@ -2,7 +2,8 @@
 
 require_once('../_modelo/conexion.php');
 require_once('../_modelo/m_reclamaciones.php');
-$reclamo = ObtenerIDReclamo();  // Suponiendo que tienes una función que devuelve los reclamos
+
+$reclamo = ObtenerIDReclamo();  // función que devuelve los reclamos por id
 
 ?>
 
@@ -36,9 +37,9 @@ $reclamo = ObtenerIDReclamo();  // Suponiendo que tienes una función que devuel
                 <div class="card shadow-lg">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
-                            <button onclick="window.history.back()" class="btn btn-secondary">
+                            <a href="../_vista/panel_admin.php" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Volver
-                            </button>
+                            </a>
                             <h3 class="mb-0">Responder Reclamo #<?= $reclamo['id_reclamacion'] ?></h3>
                             
                             <div style="width: 85px"></div>
@@ -55,9 +56,16 @@ $reclamo = ObtenerIDReclamo();  // Suponiendo que tienes una función que devuel
                                 
                                 <p class="detail-label">Monto Reclamado:</p>
                                 <p>S/.<?= number_format($reclamo['monto_reclamado'], 2) ?></p>
+
+                                <p class="detail-label">Correo del Usuario:</p>
+                                <p><?= htmlspecialchars($reclamo['email_usuario']) ?></p>
+
                             </div>
                             
                             <div class="col-md-6">
+                                <p class="detail-label">Nombre del Usuario:</p>
+                                <p><?= htmlspecialchars($reclamo['nombre']) ?></p>
+
                                 <p class="detail-label">Tipo de Reclamo:</p>
                                 <p><?= htmlspecialchars($reclamo['tipo_reclamo']) ?></p>
                                 
@@ -81,6 +89,8 @@ $reclamo = ObtenerIDReclamo();  // Suponiendo que tienes una función que devuel
                                     <?php echo htmlspecialchars($estado); ?>
                                 </span>
 
+                                <p class="detail-label">Celular de contacto:</p>
+                                <p><?= htmlspecialchars($reclamo['cel_usuario']) ?></p>
                             </div>
                         </div>
 

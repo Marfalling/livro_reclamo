@@ -1,34 +1,30 @@
 <?php
 // Incluye la conexión a la base de datos
 include('../_modelo/conexion.php');
+require_once('../_modelo/m_reclamaciones.php');
 
 // Verifica si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Obtiene los datos del formulario
+    // Obtiene los datos enviados desde el formulario
     $id_reclamo = isset($_POST['id_reclamo']) ? $_POST['id_reclamo'] : null;
     $respuesta = isset($_POST['respuesta']) ? $_POST['respuesta'] : null;
 
     // Verifica que ambos campos tengan valores
     if ($id_reclamo && $respuesta) {
-        // Prepara la consulta para actualizar la respuesta en la base de datos, incluyendo la fecha de respuesta
-        $sql = "UPDATE reclamaciones 
-        SET respuesta = ?, estado = 'Respondido', fecha_respuesta = NOW() 
-        WHERE id_reclamacion = ?";
-        $stmt = $con->prepare($sql);
-        $stmt->bind_param("si", $respuesta, $id_reclamo);
-        $result = $stmt->execute();
+        // Llama a la función `actualizarRespuesta` del modelo
+        $resultado = actualizarRespuesta($id_reclamo, $respuesta);
 
-        if ($result) {
-            // Redirige a panel_admin.php después de guardar la respuesta
+        // Comprueba si la actualización fue exitosa
+        if ($resultado) {
+            // Redirige al panel de administrador
             echo "<script type='text/javascript'>window.location.href = '../_vista/panel_admin.php';</script>";
             exit();
         } else {
-            // Error en la consulta
-            echo "Error al actualizar la respuesta: " . mysqli_error($con);
+            echo "Error al actualizar la respuesta.";
         }
     } else {
-        // Si faltan campos
         echo "Por favor ingresa una respuesta válida.";
     }
 }
+
 ?>
