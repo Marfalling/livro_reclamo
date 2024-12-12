@@ -85,5 +85,38 @@ function actualizarRespuesta($id_reclamo, $respuesta) {
 }
 
 
+function ObtenerReclamosPorNombreOID($criterio) {
+    require('conexion.php');
+
+    // Consulta para buscar reclamos por nombre o ID
+    $sql = "SELECT r.*, u.nombre 
+            FROM reclamaciones r
+            JOIN usuario u ON r.id_usuario = u.id_usuario
+            WHERE r.id_reclamacion = ? OR u.nombre LIKE ?";
+    
+    $stmt = $con->prepare($sql);
+    if (!$stmt) {
+        die("Error al preparar la consulta: " . $con->error);
+    }
+
+    // Preparar los valores para la consulta
+    $criterio_nombre = "%" . $criterio . "%";
+    $stmt->bind_param("is", $criterio, $criterio_nombre);
+    $stmt->execute();
+
+    $resultado = $stmt->get_result();
+
+    // Verificar si hay resultados
+    if ($resultado && $resultado->num_rows > 0) {
+        $reclamos = [];
+        while ($fila = $resultado->fetch_assoc()) {
+            $reclamos[] = $fila;
+        }
+        return $reclamos;
+    } else {
+        return []; // Si no hay resultados, retornar un array vacío
+    }
+}
+
 
 ?>

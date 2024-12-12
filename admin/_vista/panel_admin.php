@@ -2,7 +2,7 @@
 require_once('../_modelo/conexion.php'); 
 require_once('../_modelo/m_reclamaciones.php');
 require_once('../_controlador/filtrar_fecha.php');  
-
+require_once('../_controlador/filtrar_reclamo.php');  
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -77,10 +77,31 @@ require_once('../_controlador/filtrar_fecha.php');
 
             
             <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    Lista de Reclamos
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-table me-1"></i>
+                        Lista de Reclamos
+                    </div>
+                    <div class="d-flex">
+                    <form method="POST" class="d-flex w-100">
+                        <input 
+                            type="text" 
+                            id="busqueda_especifica" 
+                            name="criterio" 
+                            class="form-control form-control-sm me-2" 
+                            style="width: 250px;" 
+                            placeholder="Buscar reclamos"
+                            value="<?= htmlspecialchars($criterio ?? '') ?>"
+                        >
+                        <button type="submit" name="buscar" class="btn btn-primary btn-sm">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
                 </div>
+
+                </div>
+
+                
                 <div class="card-body">
                     <table id="datatablesSimple" class="table table-striped table-bordered">
                         <thead>
@@ -138,7 +159,7 @@ require_once('../_controlador/filtrar_fecha.php');
                                 <td class="text-center"><?php echo $respuesta; ?></td>
                                 <td class="text-center"><?php echo $fecha_respuesta; ?></td>
                                 <td class="text-center">
-                                    <a href="/cliente/_vista/reclamo_pdf.php?id_usuario=<?php echo htmlspecialchars($value['id_usuario']); ?>" 
+                                    <a href="/livro_reclamo/cliente/_vista/reclamo_pdf.php?id_usuario=<?php echo htmlspecialchars($value['id_usuario']); ?>" 
                                        class="btn btn-info btn-sm" 
                                        target="_blank">Ver PDF</a>
                                 </td>
@@ -154,6 +175,25 @@ require_once('../_controlador/filtrar_fecha.php');
                         ?>
                         </tbody>
                     </table>
+                    
+
+                    <nav aria-label="Page navigation" class="d-flex justify-content-center mt-3">
+                    <ul class="pagination">
+                        <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        </li>
+                    </ul>
+                    </nav>
                 </div>
             </div>
         </div>

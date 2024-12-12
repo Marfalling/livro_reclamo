@@ -10,22 +10,31 @@ date_default_timezone_set('America/Lima');
 $fecha_actual = date('Y-m-d');
 $fecha_30_dias_antes = date('Y-m-d', strtotime('-30 days'));
 
-// Verificar si el formulario ha sido enviado
+
 if (isset($_POST['buscar'])) {
-    // Obtener las fechas desde el formulario
-    $fecha_inicio = $_POST['fecha_inicio'];  
-    $fecha_fin = $_POST['fecha_fin'];        
+    // Obtener las fechas desde el formulario (manejo seguro)
+    $fecha_inicio = $_POST['fecha_inicio'] ?? '';
+    $fecha_fin = $_POST['fecha_fin'] ?? '';
+
+    // Validar si las fechas están vacías
+    if (empty($fecha_inicio)) {
+        $fecha_inicio = $fecha_30_dias_antes;
+    }
+
+    if (empty($fecha_fin)) {
+        $fecha_fin = $fecha_actual;
+    }
 
     // Llamar a la función para obtener los reclamos según el rango de fechas
     $reclamos = ObtenerReclamosPorFecha($fecha_inicio, $fecha_fin);
-}
-else {
-    // Si no se ha enviado el formulario, usamos las fechas predeterminadas
+} else {
+    // Si no se ha enviado el formulario, usar las fechas predeterminadas
     $fecha_inicio = $fecha_30_dias_antes;
     $fecha_fin = $fecha_actual;
 
     // Llamar a la función para obtener los reclamos según el rango de fechas predeterminados
     $reclamos = ObtenerReclamosPorFecha($fecha_inicio, $fecha_fin);
 }
+
 
 ?>
